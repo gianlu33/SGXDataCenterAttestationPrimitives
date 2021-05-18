@@ -772,7 +772,11 @@ static int __init sgx_init(void)
 #ifdef HAVE_KSYM_LOOKUP
 	k_mmput_async = (void*)kallsyms_lookup_name("mmput_async");
 #else
+#ifdef TEST_MMPUT
+	k_mmput_async = mmput;
+#else
 	#error "kernel version is not be supported. We need either mmput_async or kallsyms_lookup_name exported from kernel"
+#endif
 #endif
 #endif
 	if (!k_mmput_async){

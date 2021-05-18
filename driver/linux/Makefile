@@ -11,12 +11,16 @@ else
 KDIR := /lib/modules/$(shell uname -r)/build
 KSYM_MMPUT_ASYNC := $(shell grep  "mmput_async\svmlinux\sEXPORT" $(KDIR)/Module.symvers)
 KSYM_LOOKUP := $(shell grep "kallsyms_lookup_name\svmlinux\sEXPORT" $(KDIR)/Module.symvers)
+TEST_MMPUT := 1
 EXTRA_CFLAGS :=
 ifneq ($(KSYM_MMPUT_ASYNC),)
 	EXTRA_CFLAGS += -DHAVE_MMPUT_ASYNC
 endif
 ifneq ($(KSYM_LOOKUP),)
 	 EXTRA_CFLAGS += -DHAVE_KSYM_LOOKUP
+endif
+ifneq ($(TEST_MMPUT),)
+	 EXTRA_CFLAGS += -DTEST_MMPUT
 endif
 INKERNEL_SGX :=$(shell cat $(KDIR)/.config | grep "CONFIG_X86_SGX=y\|CONFIG_INTEL_SGX=y")
 ifneq ($(INKERNEL_SGX),)
